@@ -8,6 +8,8 @@ chrome.runtime.onMessage.addListener(
 );
 
 function unpause(/* sendResponse */){
-    console.log('Toggle', document.getElementsByClassName('-logo js-gps-track')[0].click());
+    var el = document.querySelectorAll('yt-button-renderer #button.yt-button-renderer');
+
+    console.log('Toggle', el);
     // sendResponse();
 }

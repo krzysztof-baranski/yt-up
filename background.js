@@ -1,10 +1,10 @@
-import { urls } from './consts';
+// import { urls } from './consts';
 
 // Called when the user clicks on the browser action
-console.log('!! ', Consts, chrome);
+// console.log('!! ', Consts, chrome);
 
 function doStaffWithDom (domContent) {
-    console.warn('!! dommm', domContent, urls);
+    console.warn('!! dommm', domContent);
 }
 
 chrome.browserAction.onClicked.addListener(function(tab) {
