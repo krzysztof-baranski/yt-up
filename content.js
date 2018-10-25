@@ -13,7 +13,7 @@ chrome.runtime.onMessage.addListener(
                     btn = divMain[0].querySelectorAll('paper-button');
                     if (btn.length) {
                         btn[0].click();
-                        sendResponse({ tabId: tabId, icon: 'paused.png' });
+                        sendResponse({ tabId: request.tabId, icon: 'paused.png' });
                         // me.disconnect(); // stop observing
                         return;
                     }
