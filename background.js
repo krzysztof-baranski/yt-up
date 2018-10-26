@@ -20,7 +20,12 @@ function changeIcon (data) {
             });
         }, 2000);
 
-        alert('Paused?');
+
+        chrome.tabs.update(tabId, {highlighted: true}, function () {
+           
+            console.log('tab open?', tabId);
+        })
+        // alert('Paused?');
     }
 }
 

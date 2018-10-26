@@ -7,12 +7,13 @@ chrome.runtime.onMessage.addListener(
                 // `mutations` is an array of mutations that occurred
                 // `me` is the MutationObserver instance
                 var divMain;
-                divMain = document.querySelectorAll('div#main.style-scope.yt-confirm-dialog-renderer');
-                console.log('@@@ Observer ', divMain);
+                divMain = document.querySelectorAll('paper-dialog');
                 if (divMain.length) {
-                    btn = divMain[0].querySelectorAll('paper-button');
+                    btn = divMain[0].querySelectorAll('confirm-button');
                     if (btn.length) {
-                        btn[0].click();
+                        console.log('@@@ Observer ', btn);
+                        
+                        // btn[0].click();
                         sendResponse({ tabId: request.tabId, icon: 'paused.png' });
                         // me.disconnect(); // stop observing
                         return;
