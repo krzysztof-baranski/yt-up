@@ -9,8 +9,8 @@ function changeIcon (data) {
 
     if (tabId) {
         chrome.browserAction.setIcon({
-            path: iconName,
-            tabId: tabId
+            path: iconName
+            // tabId: tabId
         });
 
         setTimeout(function () {
@@ -19,7 +19,8 @@ function changeIcon (data) {
                 tabId: tabId
             });
         }, 2000);
-
+        
+        console.log('icon changed unpaused?', tabId);
 
         chrome.tabs.update(tabId, {highlighted: true}, function () {
            
