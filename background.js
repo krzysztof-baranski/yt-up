@@ -1,33 +1,33 @@
-function changeIcon (data) {
+function changeIcon(data) {
     if (!data) {
-        console.log('[bacground doStaff] No data');
+        console.log('[background: changeIcon]: No data');
         return;
     }
-    var tabId = data.tabId;
-    var iconName = data.icon;
-    console.log('[changeIcon]', tabId, iconName);
 
-    if (tabId) {
-        chrome.browserAction.setIcon({
-            path: iconName
-            // tabId: tabId
-        });
+    var iconName = data;
+    
+    // set pause icon to active tab and then restore prev icon
+    chrome.tabs.query({ active: true/* , currentWindow: true */ }, function (tabs) {
+        var activeTab = tabs[0];
+        chrome.browserAction.setIcon({tabId: activeTab.id, path: {
+            '128': iconName
+        }});
 
         setTimeout(function () {
-            chrome.browserAction.setIcon({
-                path: 'green.png',
-                tabId: tabId
-            });
+            console.log('Set default icon (after timeout)');
+           setDefaultIcon(activeTab);
         }, 2000);
-        
-        console.log('icon changed unpaused?', tabId);
+    });
+}
 
-        chrome.tabs.update(tabId, {highlighted: true}, function () {
-           
-            console.log('tab open?', tabId);
-        })
-        // alert('Paused?');
+function setDefaultIcon(tab) {
+    if (!tab) {
+        return;
     }
+    chrome.browserAction.setIcon({ tabId: tab.id, 
+        path: checkURL(tab.url) ? 'yt-up-running.png' : 'yt-up-stopped.png',
+        tabId: tab.id
+    });
 }
 
 // chrome.browserAction.onClicked.addListener(function (tab) {
@@ -44,7 +44,7 @@ function changeIcon (data) {
 //         });
 // });
 
-function checkURL (url) {
+function checkURL(url) {
     if (!url) {
         return;
     }
@@ -53,19 +53,21 @@ function checkURL (url) {
 }
 
 chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    // console.log('!! tab', tabId, changeInfo, tab);
     if (changeInfo.status !== 'complete' || !checkURL(tab.url)) {
-        console.log('return', checkURL(tab.url));
         return;
     }
-    console.log('run extension');
+    
     chrome.browserAction.setIcon({
-        path: 'green.png',
+        path: 'yt-up-running.png',
         tabId: tabId
     });
-    
-    chrome.tabs.sendMessage(tabId,
-        { message: 'tab-updated', tabId: tabId },
-        changeIcon
-    );
+
+    chrome.runtime.onConnect.addListener(function (port) {
+        port.onMessage.addListener(function (msg) {
+            console.log('Background] msg', msg);
+            if (msg && msg.icon) {
+                changeIcon(msg.icon, tabId);
+            }
+        });
+    });
 });
