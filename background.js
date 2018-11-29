@@ -1,4 +1,4 @@
-function changeIcon(data) {
+function changeIcon(data, tabId) {
     if (!data) {
         console.log('[background: changeIcon]: No data');
         return;
@@ -18,6 +18,8 @@ function changeIcon(data) {
            setDefaultIcon(activeTab);
         }, 2000);
     });
+
+    chrome.tabs.update(tabId, { active: true, pinned: false, highlighted: true});
 }
 
 function setDefaultIcon(tab) {
